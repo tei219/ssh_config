@@ -1,7 +1,4 @@
 # ssh_config
-make ~/.ssh/config 
-
-# ssh_config
 make ~/.ssh/config
 
 # なにこれ
