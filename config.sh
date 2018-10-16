@@ -1,19 +1,22 @@
 #!/bin/bash
 
+pushd $(cd $(dirname $0) && pwd) >/dev/null
+
 function help() {
   echo "Usage: $0 [add] server_name ssh_settings [via server_name [ssh_settings]] [via server_name [ssh_settings]]..."
   echo "       $0 [list | show | update ]"
   echo "       ssh_settings := ssh_user server_ip [ssh_port]"
   echo ""
   echo "generate ~/.ssh/config specified string."
-  echo "  list     : show defined server list" 
-  echo "  show     : show config from defined servers' .config" 
-  echo "  update   : generate ~/.ssh/config" 
-  echo "  add      : show defined server list" 
+  echo "  list     : show defined server list"
+  echo "  show     : show config from defined servers' .config"
+  echo "  update   : generate ~/.ssh/config"
+  echo "  add      : show defined server list"
+  echo "  exp      : create except script"
 }
 
 function list() {
-  tree -d $(dirname $0)
+  tree -d $(pwd)
 }
 
 function show() {
@@ -47,6 +50,7 @@ function add() {
         for i in $(seq 2 1 $(( ${n} - 1 )))
         do
           echo ${h[${i}]} >> ${viapath}/.config
+          echo "${h} added."
         done
       else
         echo "missing username of '${h[0]}', abort"
@@ -66,6 +70,33 @@ function add() {
     fi
   done
  }
+
+function exp() {
+  buf="$(pwd)/.expects/.exp $1"
+  path="."
+  p=$(find ./ -type d -name $1)
+  if [[ -d $p ]]; then
+    ds="${p//\// }"
+    for d in $ds
+    do
+      if [[ "$d" != "." ]]; then
+        path="$path/$d"
+        user=$(cat ${path}/.config | head -1 | tail -1)
+        ip=$(cat ${path}/.config | head -2 | tail -1)
+        read -p "[${d}] ${user}@${ip}'s password: " a
+        buf="$buf $a"
+
+      fi
+    done
+    echo $buf > $p/.exp
+    chmod +x $p/.exp
+    unlink .expects/$1 2>/dev/null
+    ln -s  $(pwd)/${p/.\//}/.exp .expects/$1
+    echo "create $1's script for auto login."
+  else
+    echo "missing target $1, abort"
+  fi
+}
 
 if [[ "$1" == "" ]] || [[ "$1" == "help" ]]; then
   echo "missing ssh_settings"
@@ -91,11 +122,16 @@ if [[ "$1" == "update" ]]; then
   exit 0
 fi
 
+if [[ "$1" == "exp" ]]; then
+  exp $2
+  exit 0
+fi
+
 # create directory and .config file for to generate ~/.ssh/config
 if [[ "$1" == "add" ]]; then
   shift;
 fi
 add $*
-echo "added."
 
+popd > /dev/null
 
