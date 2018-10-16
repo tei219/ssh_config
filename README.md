@@ -36,4 +36,4 @@
 
 ## オートログイン用
    $ ./config exp vmxxxx
-vmxxxx のオートログインように except スクリプトを作成します 
+vmxxxx のオートログインように except スクリプトを作成します  
