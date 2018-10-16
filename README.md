@@ -35,5 +35,5 @@
 登録状況を確認できます。書いたサーバが忘れたら使う  
 
 ## オートログイン用
-   $ ./config exp vmxxxx
+    $ ./config exp vmxxxx
 vmxxxx のオートログインように except スクリプトを作成します  
