@@ -3,7 +3,7 @@
 pushd $(cd $(dirname $0) && pwd) >/dev/null
 
 function help() {
-  echo "Usage: $0 [add] server_name ssh_settings [via server_name [ssh_settings]] [via server_name [ssh_settings]]..."
+  echo "Usage: $0 [add] server_name ssh_settings [via server_name [ssh_settings]]..."
   echo "       $0 [list | show | update ]"
   echo "       ssh_settings := ssh_user server_ip [ssh_port]"
   echo ""

@@ -12,13 +12,13 @@
 
     .
     |-- config.sh
-    |-- vm0617
+    |-- vmxxxx
     |   `-- .config
-    |-- vm1252
+    |-- vmyyyy
     |   |-- .config
-    |   |-- srv3520
+    |   |-- srvzzzz
     |   |   `-- .config
-    |   |-- srv4876
+    |   |-- srvpppp
     |   |   `-- .config
     以下略
     
@@ -31,6 +31,9 @@
 ~/.ssh/config を更新します  
     
 ## リスト確認
-     $ ./config.sh list
+    $ ./config.sh list
 登録状況を確認できます。書いたサーバが忘れたら使う  
 
+## オートログイン用
+   $ ./config exp vmxxxx
+vmxxxx のオートログインように except スクリプトを作成します 
