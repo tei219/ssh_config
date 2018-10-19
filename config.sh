@@ -72,8 +72,9 @@ function add() {
  }
 
 function exp() {
-  buf="$(pwd)/.expects/.exp $1"
+  buf="$(pwd)/.expects/.auto server $1 passwords "
   path="."
+  pswds=""
   p=$(find ./ -type d -name $1)
   if [[ -d $p ]]; then
     ds="${p//\// }"
@@ -84,14 +85,15 @@ function exp() {
         user=$(cat ${path}/.config | head -1 | tail -1)
         ip=$(cat ${path}/.config | head -2 | tail -1)
         read -p "[${d}] ${user}@${ip}'s password: " a
-        buf="$buf $a"
-
+        pswds="$pswds$a "
       fi
     done
-    echo $buf > $p/.exp
-    chmod +x $p/.exp
+    pswds=${pswds% *}
+    buf="${buf}\"${pswds}\" command \"\""
+    echo $buf > $p/.auto
+    chmod +x $p/.auto
     unlink .expects/$1 2>/dev/null
-    ln -s  $(pwd)/${p/.\//}/.exp .expects/$1
+    ln -s  $(pwd)/${p/.\//}/.auto .expects/$1
     echo "create $1's script for auto login."
   else
     echo "missing target $1, abort"

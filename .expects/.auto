@@ -1,0 +1,45 @@
+#!/usr/bin/expect
+
+set Command ""
+# argumetns
+for { set i 0} {$i < $argc} {incr i} {
+  set tmp [lindex $argv $i]
+  switch ${tmp} {
+    "server" { incr i; set RemoteHost [lindex $argv $i]; }
+    "passwords" { incr i; set PWlist [split [lindex $argv $i] " "]; }
+    "command" { incr i; set Command [lindex $argv $i]; }
+    default { }
+  }
+}
+
+set timeout 5
+set Prompt "\[#$%>\]"
+set PWCounter 0
+
+spawn env LANG=C /usr/bin/ssh ${RemoteHost} "${Command}"
+
+while { 1 } {
+  set PW [lindex $PWlist $PWCounter ]
+  expect {
+    -glob "(yes/no)?" {
+      send "yes\n"
+      exp_continue
+    }
+    -glob "password:" {
+      send -- "${PW}\n"
+      if { [llength $PWlist] > [expr $PWCounter + 1] } {
+        incr PWCounter 1
+      }
+    }
+    -glob "${Prompt}" {
+      if { [string length $Command] <= 0 } {
+        interact
+        exit 0
+      }
+    }
+    eof {
+      exit 0
+    }
+  }
+}
+
