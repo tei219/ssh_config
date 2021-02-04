@@ -27,7 +27,7 @@ function check() {
 
 function list() {
   #tree -d $(pwd)
-  pwd; find ~/ssh_config/ -type d | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/| /g'
+  pwd; find ~/ssh_config/ -type d | grep -v ^\. |sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/| /g'
 }
 
 function show() {
