@@ -27,7 +27,9 @@ function check() {
 
 function list() {
   #tree -d $(pwd)
-  pwd; find ~/ssh_config/ -type d | grep -v ^\. |sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/| /g'
+  #pwd; find $(dirname $0) -type d | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/| /g'
+  pwd; 
+  find . -type d -not -path "./.*/*" -not -name ".*" | sort | sed 's/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/| /g'
 }
 
 function show() {
@@ -190,4 +192,5 @@ fi
 add $*
 
 popd > /dev/null
+
 
